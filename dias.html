@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mapa de Roteiro de Viagem</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        /* Define o mapa para ocupar toda a tela */
+        html, body { height: 100%; margin: 0; padding: 0; }
+        #map { height: 100%; width: 100%; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Inicializa o mapa
+        var map = L.map('map');
+
+        // Adiciona o mapa de fundo
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // Define os pontos do roteiro com datas de hospedagem
+        var cities = [
+            { name: "Toulouse - Partida em 20/12", coords: [43.6047, 1.4442] },
+            { name: "Paris - 20 a 25/12", coords: [48.8566, 2.3522] },
+            { name: "Bruxelas - 25 a 26/12", coords: [50.8503, 4.3517] },
+            { name: "Amsterdã - 26 a 28/12", coords: [52.3676, 4.9041] },
+            { name: "Antuérpia - 28 a 31/12", coords: [51.2194, 4.4025] },
+            { name: "Bruges - 31/12 a 03/01", coords: [51.2093, 3.2247] },
+            { name: "Lille - 03 a 05/01", coords: [50.6292, 3.0573] },
+            { name: "Retorno a Toulouse - Chegada em 05/01", coords: [43.6047, 1.4442] }
+        ];
+
+        // Adiciona os marcadores e cria o itinerário com linhas
+        var latlngs = [];
+        cities.forEach(function(city) {
+            L.marker(city.coords).addTo(map)
+                .bindPopup(city.name)
+                .openPopup();
+            latlngs.push(city.coords);
+        });
+
+        // Adiciona a linha conectando as cidades
+        L.polyline(latlngs, { color: 'blue', weight: 3 }).addTo(map);
+
+        // Centraliza e ajusta o zoom para mostrar todo o itinerário
+        map.fitBounds(latlngs);
+    </script>
+</body>
+</html>
